@@ -12,10 +12,27 @@ export const googleStrategyLogin = new GoogleStrategy({
       user = new UserModel({
         name: profile.displayName,
         email: profile.emails[0].value,
+        type: "google",
       });
-
-      await user.save();
     }
+
+    const payload = {
+      user: {
+        id: user.id,
+        email: user.email
+      },
+    };
+
+    jwt.sign(
+      payload,
+      process.env.JWTSECRET,
+      { expiresIn: 36000 },
+      async (err, token) => {
+        if (err) throw err
+        await user.save()
+        return res.json({ token })
+      }
+    )
     done(null, user);
   } catch (error) {
     console.log(error)

@@ -10,7 +10,7 @@ export const signUp = async (req, res) => {
       if (user) {
         return res.status(422).json({ errors: [{ message: 'User already exists' }] })
       }
-      user = new UserModel({ name, email, password })
+      user = new UserModel({ name, email, password, type: "password" })
       const payload = {
         user: {
           id: user.id,

@@ -17,7 +17,11 @@ const UserSchema = new Schema(
       type: String,
       minlength: 6,
       select: false,
-      required: true
+    },
+    type: {
+      type: String,
+      enum: ['password', 'google'],
+      default: 'password'
     },
     role: {
       type: String,

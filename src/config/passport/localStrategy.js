@@ -8,9 +8,9 @@ export const localStrategyLogin = new LocalStrategy(
     usernameField: 'email'
   },
   async (email, password, done) => {
-    const user = await UserModel.findOne({ email }).select('+password')
+    const user = await UserModel.findOne({ email, type: 'password' }).select('+password')
     if (!user) {
-      return done(null, false, { message: 'User not found' })
+      return done({ message: 'User not found' }, false)
     }
     try {
       const isPasswordValid = await user.isValidPassword(password)

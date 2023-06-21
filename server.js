@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import cors from "cors";
 import morgan from "morgan";
+import session from 'express-session';
 import express, { json } from "express";
 import connectDB from "./src/config/db.js";
 import authRouter from "./src/routes/api/auth.js";
@@ -14,6 +15,12 @@ const app = express();
 app.use(json({ extended: false }));
 app.use(cors("*"));
 app.use(morgan('tiny'));
+app.use(session({
+  secret: process.env.SECRET_KEY,
+  resave: false,
+  saveUninitialized: false
+}));
+
 app.get('/', (req, res) => {
   res.send("API is running");
 });

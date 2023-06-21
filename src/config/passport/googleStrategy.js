@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken'
+import passport from 'passport'
 import UserModel from '../../models/User.js'
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth'
 
@@ -30,7 +32,7 @@ export const googleStrategyLogin = new GoogleStrategy({
       async (err, token) => {
         if (err) throw err
         await user.save()
-        return res.json({ token })
+        return done(null, { token });
       }
     )
     done(null, user);
@@ -39,3 +41,16 @@ export const googleStrategyLogin = new GoogleStrategy({
     done(error);
   }
 })
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await UserModel.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(error);
+  }
+});

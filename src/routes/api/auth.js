@@ -21,5 +21,9 @@ authRouter
   .get(passport.authenticate('google', {
     successRedirect: '/',
     failureRedirect: '/signin'
-  }))
+  }), (req, res) => {
+    const { token } = req.user;
+    res.json({ token });
+  });
+
 export default authRouter;
